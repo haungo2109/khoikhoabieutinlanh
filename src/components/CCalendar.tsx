@@ -2,7 +2,7 @@ import { Calendar, DateLocalizer, momentLocalizer } from 'react-big-calendar';
 import moment from 'moment';
 import 'globalize/lib/cultures/globalize.culture.vi';
 import 'globalize/lib/cultures/globalize.culture.vi-VN';
-import { useMemo } from 'react';
+import { useCallback, useMemo } from 'react';
 import 'moment-timezone';
 
 const culture = 'vi';
@@ -53,7 +53,7 @@ moment.updateLocale('vi', {
   },
 });
 
-const messages: {[key: string]: any} = {
+const messages: { [key: string]: any } = {
   week: 'Tuần',
   work_week: 'Tuần làm việc',
   day: 'Ngày',
@@ -69,7 +69,7 @@ const messages: {[key: string]: any} = {
   yesterday: 'Hôm qua',
   tomorrow: 'Ngày mai',
   noEventsInRange: 'Sắp tới không có hoạt động nào.',
-  showMore: (total: number) => `+${total} hoạt động`,
+  showMore: (total: number) => `+${total} HĐ`,
 };
 
 const localizer = momentLocalizer(moment);
@@ -79,30 +79,50 @@ interface Props {
 }
 
 const CCalendar = (props: Props) => {
-  const { formats }: {[key: string]: any} = useMemo(
+  const { formats }: { [key: string]: any } = useMemo(
     () => ({
       formats: {
         dayFormat: (date: Date, culture: string, localizer: DateLocalizer) =>
-          localizer.format(date, 'ddd, D/M', culture),
+          localizer.format(date, 'ddd', culture),
         dayHeaderFormat: (date: Date, culture: string, localizer: DateLocalizer) =>
           localizer.format(date, 'ddd, D/M', culture),
+        timeGutterFormat: (date: Date, culture: string, localizer: DateLocalizer) =>
+          localizer.format(date, 'H[h]', culture),
+        eventTimeRangeFormat: () => "" //range: { start: Date, end: Date }, culture: string, localizer: DateLocalizer
       },
     }),
     []
   );
 
+  const eventPropGetter = useCallback(
+    (event: any, start: Date, end: Date) => { //isSelected: boolean
+      if (!end) return {};
+      const nowHour = moment(start).hour();
+      const time = nowHour < 12 ? "sang" : nowHour < 18 ? "chieu" : "toi";
+      let className = `${event.type} ${time}`;
+
+
+      return { className, style: { fontSize: "small" } };
+    },
+    []
+  )
+
   return (
     <>
       <Calendar
+        eventPropGetter={eventPropGetter}
         events={props.events}
         culture={culture}
         formats={formats}
         localizer={localizer}
         defaultDate={new Date()}
         popup={true}
-        allDayMaxRows={3}
+        allDayMaxRows={4}
         style={{ height: '100%' }}
+        step={30}
         messages={messages}
+        defaultView='week'
+        // views={['week', 'month','day','agenda']}
       />
     </>
   );

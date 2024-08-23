@@ -6,7 +6,7 @@ const { RangePicker } = DatePicker;
 const ruleRequired = { required: true, message: 'Vui lòng không để trống' };
 
 const FormTask = () => {
-  const [open, setOpen] = useState(true);
+  const [open, setOpen] = useState(false);
   const [form] = Form.useForm();
 
   const showModal = () => setOpen(true);
@@ -51,7 +51,7 @@ const FormTask = () => {
             <Input placeholder="Nhập tiêu đề" />
           </Form.Item>
           <Form.Item name="type" label="Loại hình" initialValue="truda" rules={[{ ...ruleRequired }]}>
-            <Radio.Group defaultValue="truda">
+            <Radio.Group>
               <Radio value="truda">Truđa</Radio>
               <Radio value="chamsoc">Chăm sóc</Radio>
             </Radio.Group>
