@@ -1,4 +1,4 @@
-import { Calendar, momentLocalizer } from 'react-big-calendar';
+import { Calendar, DateLocalizer, momentLocalizer } from 'react-big-calendar';
 import moment from 'moment';
 import 'globalize/lib/cultures/globalize.culture.vi';
 import 'globalize/lib/cultures/globalize.culture.vi-VN';
@@ -53,7 +53,7 @@ moment.updateLocale('vi', {
   },
 });
 
-const messages = {
+const messages: {[key: string]: any} = {
   week: 'Tuần',
   work_week: 'Tuần làm việc',
   day: 'Ngày',
@@ -69,18 +69,22 @@ const messages = {
   yesterday: 'Hôm qua',
   tomorrow: 'Ngày mai',
   noEventsInRange: 'Sắp tới không có hoạt động nào.',
-  showMore: (total, remainingEvents, events) => `+${total} hoạt động`,
+  showMore: (total: number) => `+${total} hoạt động`,
 };
 
 const localizer = momentLocalizer(moment);
 
-const CCalendar = ({ events }) => {
-  const { formats } = useMemo(
+interface Props {
+  events: Event[];
+}
+
+const CCalendar = (props: Props) => {
+  const { formats }: {[key: string]: any} = useMemo(
     () => ({
       formats: {
-        dayFormat: (date, culture, localizer) =>
+        dayFormat: (date: Date, culture: string, localizer: DateLocalizer) =>
           localizer.format(date, 'ddd, D/M', culture),
-        dayHeaderFormat: (date, culture, localizer) =>
+        dayHeaderFormat: (date: Date, culture: string, localizer: DateLocalizer) =>
           localizer.format(date, 'ddd, D/M', culture),
       },
     }),
@@ -90,7 +94,7 @@ const CCalendar = ({ events }) => {
   return (
     <>
       <Calendar
-        events={events}
+        events={props.events}
         culture={culture}
         formats={formats}
         localizer={localizer}

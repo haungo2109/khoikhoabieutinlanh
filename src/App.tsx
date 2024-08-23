@@ -1,11 +1,9 @@
-import { Calendar, momentLocalizer } from 'react-big-calendar';
 import CCalendar from './components/CCalendar';
 import data from './data.json';
-import { Button, Modal } from 'antd';
 import FormTask from './components/FormTask';
 import './App.css';
 
-const events = data.map(({ start, end, ...rest }) => ({
+const events: any = data.map(({ start, end, ...rest }) => ({
   start: new Date(Date.parse(start)),
   end: new Date(Date.parse(end)),
   ...rest,
