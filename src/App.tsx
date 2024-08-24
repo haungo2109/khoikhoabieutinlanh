@@ -13,9 +13,7 @@ const events: any = data.map(({ start, end, ...rest }) => ({
 }));
 
 const {
-  GOOGLE_AUTH_CLIENT_EMAIL: client_email,
-  GOOGLE_AUTH_PRIVATE_KEY: private_key,
-  GOOGLE_SPREADSHEET_ID: spreadsheetId,
+  GOOGLE_AUTH_CLIENT_EMAIL: client_email
 } = import.meta.env;
 
 // const table = new GoogleSheetsTable({
@@ -43,7 +41,7 @@ function App() {
 
   const getAPI = async () => {
     // const { row } = await table.findRow((r) => r.id === 1001);
-    console.log(client_email);
+    console.log("client_email", client_email);
     // await doc.loadInfo(); // loads document properties and worksheets
     // console.log(doc.title);
   }
