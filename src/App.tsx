@@ -3,7 +3,7 @@ import CCalendar from './components/CCalendar';
 import data from './data.json';
 import FormTask from './components/FormTask';
 import './App.css';
-import { GoogleSheetsTable } from "google-sheets-table";
+// import { GoogleSheetsTable } from "google-sheets-table";
 
 
 const events: any = data.map(({ start, end, ...rest }) => ({
@@ -18,17 +18,17 @@ const {
   GOOGLE_SPREADSHEET_ID: spreadsheetId,
 } = import.meta.env;
 
-const table = new GoogleSheetsTable({
-  // using a Google service account
-  credentials: {
-    client_email,
-    private_key,
-  },
-  spreadsheetId,
-  sheetName: "Sheet1",
-  // enforce that 'id' and 'sku' columns are unique
-  columnConstraints: { uniques: ["id"] },
-});
+// const table = new GoogleSheetsTable({
+//   // using a Google service account
+//   credentials: {
+//     client_email,
+//     private_key,
+//   },
+//   spreadsheetId,
+//   sheetName: "Sheet1",
+//   // enforce that 'id' and 'sku' columns are unique
+//   columnConstraints: { uniques: ["id"] },
+// });
 
 // const serviceAccountAuth = new JWT({
 //   email: creds.client_email,
@@ -42,8 +42,8 @@ const table = new GoogleSheetsTable({
 function App() {
 
   const getAPI = async () => {
-    const { row } = await table.findRow((r) => r.id === 1001);
-    console.log(row);
+    // const { row } = await table.findRow((r) => r.id === 1001);
+    console.log(client_email);
     // await doc.loadInfo(); // loads document properties and worksheets
     // console.log(doc.title);
   }
