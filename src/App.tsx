@@ -3,8 +3,6 @@ import CCalendar from './components/CCalendar';
 import data from './data.json';
 import FormTask from './components/FormTask';
 import './App.css';
-// import { GoogleSheetsTable } from "google-sheets-table";
-
 
 const events: any = data.map(({ start, end, ...rest }) => ({
   start: new Date(Date.parse(start)),
@@ -12,42 +10,17 @@ const events: any = data.map(({ start, end, ...rest }) => ({
   ...rest,
 }));
 
-const {
-  GOOGLE_AUTH_CLIENT_EMAIL: client_email
-} = import.meta.env;
-
-// const table = new GoogleSheetsTable({
-//   // using a Google service account
-//   credentials: {
-//     client_email,
-//     private_key,
-//   },
-//   spreadsheetId,
-//   sheetName: "Sheet1",
-//   // enforce that 'id' and 'sku' columns are unique
-//   columnConstraints: { uniques: ["id"] },
-// });
-
-// const serviceAccountAuth = new JWT({
-//   email: creds.client_email,
-//   key: creds.private_key,
-//   scopes: SCOPES
-// });
-
-// const doc = new GoogleSpreadsheet('1Gg6bNTolmnior5yOiPc5ePgHvzm2Ain5vDPYQCEZ9lQ', serviceAccountAuth);
-
 
 function App() {
-
-  const getAPI = async () => {
-    // const { row } = await table.findRow((r) => r.id === 1001);
-    console.log("client_email", client_email);
-    // await doc.loadInfo(); // loads document properties and worksheets
-    // console.log(doc.title);
-  }
+  const fetchData = async () => {
+    fetch("/api/notion")
+      .then((response) => response.json())
+      .then((data) => console.log(data))
+      .catch((error) => console.error("Error fetching data:", error));
+  };
 
   useEffect(() => {
-    getAPI();
+    fetchData();
   }, [])
 
   return (
