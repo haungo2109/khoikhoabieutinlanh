@@ -1,34 +1,32 @@
-import { useEffect } from 'react';
-import CCalendar from './components/CCalendar';
-import data from './data.json';
-import FormTask from './components/FormTask';
-import './App.css';
-
-const events: any = data.map(({ start, end, ...rest }) => ({
-  start: new Date(Date.parse(start)),
-  end: new Date(Date.parse(end)),
-  ...rest,
-}));
-
+import { useEffect, useState } from "react";
+import CCalendar from "./components/CCalendar";
+import FormTask from "./components/FormTask";
+import { getActivities } from "./services/ActivityService";
+import { IActivity } from "./models/Activity";
+import "./App.css";
 
 function App() {
+  const [activities, setActivities] = useState<IActivity[]>([]);
+
   const fetchData = async () => {
-    fetch("/api/notion")
-      .then((response) => response.json())
-      .then((data) => console.log(data))
-      .catch((error) => console.error("Error fetching data:", error));
+    const activitiesList = await getActivities();
+    setActivities(activitiesList);
+  };
+
+  const onAddActivity = (activity: IActivity) => {
+    setActivities((prev) => prev.concat(activity));
   };
 
   useEffect(() => {
     fetchData();
-  }, [])
+  }, []);
 
   return (
     <>
-      <div style={{ height: '90vh' }}>
-        <CCalendar events={events} />
+      <div style={{ height: "90vh" }}>
+        <CCalendar events={activities} />
       </div>
-      <FormTask />
+      <FormTask onAddActivity={onAddActivity} />
     </>
   );
 }

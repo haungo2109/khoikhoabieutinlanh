@@ -75,7 +75,7 @@ const messages: { [key: string]: any } = {
 const localizer = momentLocalizer(moment);
 
 interface Props {
-  events: Event[];
+  events: any[];
 }
 
 const CCalendar = (props: Props) => {
@@ -99,8 +99,7 @@ const CCalendar = (props: Props) => {
       if (!end) return {};
       const nowHour = moment(start).hour();
       const time = nowHour < 12 ? "sang" : nowHour < 18 ? "chieu" : "toi";
-      let className = `${event.type} ${time}`;
-
+      const className = `${event.type} ${time}`;
 
       return { className, style: { fontSize: "small" } };
     },
