@@ -1,4 +1,4 @@
-import { Calendar, DateLocalizer, momentLocalizer } from 'react-big-calendar';
+import { Calendar, CalendarProps, DateLocalizer, momentLocalizer } from 'react-big-calendar';
 import moment from 'moment';
 import 'globalize/lib/cultures/globalize.culture.vi';
 import 'globalize/lib/cultures/globalize.culture.vi-VN';
@@ -74,7 +74,7 @@ const messages: { [key: string]: any } = {
 
 const localizer = momentLocalizer(moment);
 
-interface Props {
+interface Props extends Partial<CalendarProps> {
   events: any[];
 }
 

@@ -1,4 +1,13 @@
-import { Button, Form, Modal, Radio, Input, DatePicker, Select } from "antd";
+import {
+  Button,
+  Form,
+  Modal,
+  Radio,
+  Input,
+  DatePicker,
+  message,
+  Slider,
+} from "antd";
 import { useState } from "react";
 import { addActivity } from "../services/ActivityService";
 import { IActivity } from "../models/Activity";
@@ -8,9 +17,22 @@ const ruleRequired = { required: true, message: "Vui lòng không để trống"
 interface Props {
   onAddActivity: (activity: IActivity) => void;
 }
+
+const titleHours: { [key: string]: string } = {
+  0.5: "30 phút",
+  1: "1 tiếng",
+  1.5: "1 tiếng 30 phút",
+  2: "2 tiếng",
+  2.5: "2 tiếng 30 phút",
+  3: "3 tiếng",
+  3.5: "3 tiếng 30 phút",
+  4: "4 tiếng",
+};
+
 const FormTask = (props: Props) => {
   const [open, setOpen] = useState(false);
   const [form] = Form.useForm();
+  const [messageApi, contextHolder] = message.useMessage();
 
   const showModal = () => setOpen(true);
 
@@ -24,14 +46,27 @@ const FormTask = (props: Props) => {
       start: new Date(values.start),
       end: endTime,
     };
-    await addActivity(activity);
-    props.onAddActivity(activity);
-    form.resetFields();
-    closeModal();
+    try {
+      await addActivity(activity);
+      props.onAddActivity(activity);
+      form.resetFields();
+      messageApi.open({
+        type: "success",
+        content: "Thêm thành công",
+      });
+      closeModal();
+    } catch (error) {
+      messageApi.open({
+        type: "error",
+        content: "Thêm không thành công. Vui lòng thử lại",
+      });
+      console.log("Lỗi khi thêm", error);
+    }
   };
 
   return (
     <>
+      {contextHolder}
       <Button
         className="btn-plus"
         type="primary"
@@ -56,7 +91,6 @@ const FormTask = (props: Props) => {
           wrapperCol={{ span: 18 }}
           layout="horizontal"
           style={{ maxWidth: 500 }}
-          variant="filled"
         >
           <Form.Item name="title" label="Tiêu đề" rules={[{ ...ruleRequired }]}>
             <Input placeholder="Nhập tiêu đề" />
@@ -94,17 +128,16 @@ const FormTask = (props: Props) => {
             rules={[{ ...ruleRequired }]}
             initialValue={1}
           >
-            <Select
-              defaultValue={1}
-              options={[
-                { value: 1, label: "1 tiếng" },
-                { value: 1.5, label: "1 tiếng rưỡi" },
-                { value: 2, label: "2 tiếng" },
-                { value: 2.5, label: "2 tiếng rưỡi" },
-                { value: 3, label: "3 tiếng" },
-                { value: 3.5, label: "3 tiếng rưỡi" },
-                { value: 4, label: "4 tiếng" },
-              ]}
+            <Slider
+              defaultValue={0.5}
+              step={0.5}
+              min={0.5}
+              max={4}
+              tooltip={{
+                formatter(value) {
+                  return value ? titleHours[value] : "";
+                },
+              }}
             />
           </Form.Item>
         </Form>
