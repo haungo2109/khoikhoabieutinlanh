@@ -4,6 +4,7 @@ import 'globalize/lib/cultures/globalize.culture.vi';
 import 'globalize/lib/cultures/globalize.culture.vi-VN';
 import { useCallback, useMemo } from 'react';
 import 'moment-timezone';
+import { IActivity } from '../models/Activity';
 
 const culture = 'vi';
 
@@ -74,7 +75,7 @@ const messages: { [key: string]: any } = {
 
 const localizer = momentLocalizer(moment);
 
-interface Props extends Partial<CalendarProps> {
+interface Props extends Partial<CalendarProps<IActivity>> {
   events: any[];
 }
 
@@ -110,7 +111,6 @@ const CCalendar = (props: Props) => {
     <>
       <Calendar
         eventPropGetter={eventPropGetter}
-        events={props.events}
         culture={culture}
         formats={formats}
         localizer={localizer}
@@ -121,7 +121,7 @@ const CCalendar = (props: Props) => {
         step={30}
         messages={messages}
         defaultView='week'
-        // views={['week', 'month','day','agenda']}
+        {...props}
       />
     </>
   );

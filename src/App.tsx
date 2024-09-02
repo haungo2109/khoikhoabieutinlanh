@@ -1,33 +1,30 @@
-import { useEffect, useState } from "react";
-import CCalendar from "./components/CCalendar";
-import FormTask from "./components/FormTask";
-import { getActivities } from "./services/ActivityService";
-import { IActivity } from "./models/Activity";
+import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
+import HomePage from "./pages/home";
+import RegisterPage from "./pages/register";
+import NotFoundPage from "./pages/404";
 import "./App.css";
 
-function App() {
-  const [activities, setActivities] = useState<IActivity[]>([]);
-
-  const fetchData = async () => {
-    const activitiesList = await getActivities();
-    setActivities(activitiesList);
-  };
-
-  const onAddActivity = (activity: IActivity) => {
-    setActivities((prev) => prev.concat(activity));
-  };
-
-  useEffect(() => {
-    fetchData();
-  }, []);
+const App = () => {
+  const userName = localStorage.getItem('userName');
 
   return (
-    <>
-      <div style={{ height: "90vh" }}>
-        <CCalendar events={activities} />
-      </div>
-      <FormTask onAddActivity={onAddActivity} />
-    </>
+    <Router>
+    <Routes>
+      <Route 
+        path="/"
+        element={userName ? <HomePage /> : <Navigate to="/register" />}
+      />
+      <Route 
+        path="/register"
+        element={<RegisterPage />}
+      />
+      {/* Redirect bất kỳ URL không hợp lệ về trang chính */}
+      <Route
+        path="*"
+        element={<NotFoundPage />}
+      />
+    </Routes>
+  </Router>
   );
 }
 

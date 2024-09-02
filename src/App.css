@@ -16,3 +16,7 @@
 .chamsoc .rbc-agenda-date-cell {
   background-color: white;
 }
+
+.rbc-timeslot-group:nth-child(-n+5) {
+  display: none !important;
+}

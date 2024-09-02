@@ -15,6 +15,7 @@ import { IActivity } from "../models/Activity";
 const ruleRequired = { required: true, message: "Vui lòng không để trống" };
 
 interface Props {
+  activity?: IActivity;
   onAddActivity: (activity: IActivity) => void;
 }
 
@@ -33,6 +34,7 @@ const FormTask = (props: Props) => {
   const [open, setOpen] = useState(false);
   const [form] = Form.useForm();
   const [messageApi, contextHolder] = message.useMessage();
+  const storedName: string = localStorage.getItem("userName") || "";
 
   const showModal = () => setOpen(true);
 
@@ -90,7 +92,7 @@ const FormTask = (props: Props) => {
           labelCol={{ span: 6 }}
           wrapperCol={{ span: 18 }}
           layout="horizontal"
-          style={{ maxWidth: 500 }}
+          style={{ maxWidth: 400 }}
         >
           <Form.Item name="title" label="Tiêu đề" rules={[{ ...ruleRequired }]}>
             <Input placeholder="Nhập tiêu đề" />
@@ -110,8 +112,9 @@ const FormTask = (props: Props) => {
             name="host"
             label="Người thực hiện"
             rules={[{ ...ruleRequired }]}
+            initialValue={storedName}
           >
-            <Input placeholder="Nhập tên người" />
+            <Input placeholder="Nhập tên người" defaultValue={storedName} />
           </Form.Item>
           <Form.Item name="start" label="Bắt đầu" rules={[{ ...ruleRequired }]}>
             <DatePicker
@@ -129,7 +132,7 @@ const FormTask = (props: Props) => {
             initialValue={1}
           >
             <Slider
-              defaultValue={0.5}
+              defaultValue={1}
               step={0.5}
               min={0.5}
               max={4}
